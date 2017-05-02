@@ -1,2 +1,0 @@
-sensor_msgs/PointCloud pcl
-string label
