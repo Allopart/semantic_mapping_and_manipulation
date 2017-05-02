@@ -1,0 +1,6 @@
+[submodule "agile_grasp"]
+	path = agile_grasp
+	url = https://github.com/Allopart/agile_grasp.git
+[submodule "dn_object_detect"]
+	path = dn_object_detect
+	url = https://github.com/Allopart/dn_object_detect.git
