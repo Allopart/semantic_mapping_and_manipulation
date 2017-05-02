@@ -1,6 +1,12 @@
 # Generalized Framework for the Parallel Semantic Segmentation of Multiple Objects and Posterior Manipulation
 
-[![Alt text for your video](https://img.youtube.com/vi/HLzFLMktIYc/0.jpg)](https://www.youtube.com/watch?v=HLzFLMktIYc)
+
+Video showing framework for detecting and grasping a bottle
+[![Video showing framework for detecting and grasping a bottle](https://img.youtube.com/vi/HLzFLMktIYc/0.jpg)](https://www.youtube.com/watch?v=HLzFLMktIYc)
+
+Detecting and grasping a cup
+[![Detecting and grasping a cup](https://img.youtube.com/vi/cmANQdS_-Zk/0.jpg)](https://www.youtube.com/watch?v=cmANQdS_-Zk)
+
 
 
 The end-to-end approach presented in this repo deals with the recognition, detection, segmentation and grasping of objects, assuming no prior knowledge of the environment nor objects. The contributions of the paper are as follows: 1) Usage of a trained Convolutional Neural Net (CNN) that recognizes up to 80 different classes of objects in real time and generates bounding boxes around them. 2) An algorithm to derive in parallel the pointclouds of said regions of interest (RoI). 3) Eight different segmentation methods to remove background data and
