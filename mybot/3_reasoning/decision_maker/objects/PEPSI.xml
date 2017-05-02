@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>PEPSI</name>
+    <name>pepsi</name>
+    <name>Pepsi</name>
+    <name>loc_pepsi</name>
+    <real_name>Pepsi Cola</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.03" height="0.13"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.06"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_point x="0.00" y="0.00" z="0.12"/>
+        <put_point     x="0.00" y="0.00" z="0.20"/>
+        <grasp_point    x="0.02" y="0.00" z="0.06"/>
+    </behavior>
+</object>
+

@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg name="path" default="~/objects"/>
+
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <node name="plane_normal" pkg="simple_recognition" type="plane_normal" launch-prefix="$(arg launch_prefix)" />
+
+  <node name="recognition" pkg="simple_recognition" type="recognition" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="lua_files" value="$(find simple_recognition)/Lua/"/>
+  	<param name="setup_files" value="$(arg path)/"/>
+  </node>
+
+
+</launch>

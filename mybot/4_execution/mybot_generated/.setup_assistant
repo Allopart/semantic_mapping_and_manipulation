@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: mybot_description
+    relative_path: urdf/mybot.urdf
+  SRDF:
+    relative_path: config/mybot.srdf
+  CONFIG:
+    author_name: Deok-Hwa Kim
+    author_email: dhkim@rit.kaist.ac.kr
+    generated_timestamp: 1491551259

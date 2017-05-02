@@ -1,0 +1,55 @@
+<launch>
+
+  	<arg name="/mobile_controller/odom"   default="/odom"/>
+
+  <!-- By default, we are not in debug mode-->
+  	<arg name="debug" default="false" />
+ 
+  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+  	<include file="$(find mybot_generated)/launch/move_group.launch">
+    	<arg name="allow_trajectory_execution" value="true"/>
+   	 <arg name="fake_execution" value="false"/>
+   	 <arg name="info" value="true"/>
+    	<arg name="debug" value="$(arg debug)"/>
+  	</include>
+  
+	<!-- RGBD streamer-->
+	<include file="$(find rgbd_streamer)/launcher/receiver.launch"/>
+	<include file="$(find image_proc)/launch/image_proc.launch"/>
+
+	<!-- Gaze selection -->
+		<include file="$(find gaze_selection)/launcher/gaze_selection.launch"/>
+		<!-- Usage:  rostopic pub /pan_tilt_angle gaze_selection/PanTilt "pan_angle:
+  data: 0.5
+tilt_angle:
+  data: 0.5"
+    -->
+
+	<!-- BB + collision obstacle 
+	  <node name="BB_for_reg_pcl" pkg="semantic_mapping" type="BB_for_reg_pcl"/>-->
+
+	<!-- Laser scan  -->
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find mybot_2dnav)/config/my_laser_config.yaml" />
+    </node>
+
+  <!-- Mybot navigation -->
+  	<param name="/use_sim_time" value="false"/>
+  	<include file="$(find mybot_2dnav)/config/move_base.xml"/>
+  
+   <!-- AMCL -->
+  	<node pkg="amcl" type="amcl" name="amcl">
+      <!-- Publish scans from best pose at a max of 10 Hz -->
+      <param name="odom_model_type" value="omni"/>
+      <param name="odom_frame_id" value="odom"/>
+      <param name="base_frame_id" value="base_footprint"/>
+    </node>  
+
+	<!-- Gaze selection -->
+
+	<!-- Run Rviz and load the default config to see the state of the move_group node -->
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_mapping)/rviz/test_BB.rviz"/> 
+	
+</launch>
+
+

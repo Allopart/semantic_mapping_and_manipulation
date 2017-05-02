@@ -1,0 +1,7 @@
+<launch>
+  <param name="/use_sim_time" value="true"/>
+  <param name="robot_description"  command="cat '$(find mybot_description)/urdf/mybot.urdf'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+  <param name="use_gui" value="false" />
+  <include file="$(find mybot_control)/launch/mybot_moveit_control_webots.launch" />
+</launch>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>LOC_1</name>
+    <name>Loc_1</name>
+    <name>loc_1</name>
+    <name>location_1</name>
+    <real_name>Predefined Location 1</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.03" height="0.004"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.002"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_point x="0.00" y="0.00" z="0.05"/>
+        <put_point     x="0.00" y="0.00" z="0.10"/>
+        <grasp_point    x="0.00" y="0.00" z="0.05"/>
+    </behavior>
+</object>
+

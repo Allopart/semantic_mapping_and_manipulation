@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>MILK</name>
+    <name>milk</name>
+    <name>loc_milk</name>
+    <name>Milk</name>
+    <real_name>Milk</real_name>
+    <collision>
+        <box>
+            <dimension x="0.06" y="0.06" z="0.12"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.06"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </box>
+    </collision>
+    <behavior>
+        <approach_left_point x="0.00" y="0.05" z="0.06"/>
+        <grasp_left_point    x="0.00" y="0.02" z="0.07"/>
+        <put_point     x="0.00" y="0.00" z="0.20"/>
+        <bottle_mouth_right_point    x="0.04" y="0.03" z="0.00"/>
+    </behavior>
+</object>
+

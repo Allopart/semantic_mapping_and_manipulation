@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>PEPPER</name>
+    <name>pepper</name>
+    <name>loc_pepper</name>
+    <name>Pepper</name>
+    <real_name>Pepper</real_name>
+    <collision>
+        <box>
+            <dimension x="0.04" y="0.10" z="0.12"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.06"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </box>
+    </collision>
+    <behavior>
+        <approach_left_point x="0.00" y="0.03" z="0.08"/>
+        <grasp_left_point    x="0.00" y="0.00" z="0.05"/>
+        <put_point     x="0.00" y="0.00" z="0.20"/>
+    </behavior>
+</object>
+

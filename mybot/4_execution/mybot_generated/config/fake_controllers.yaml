@@ -1,0 +1,158 @@
+controller_list:
+  - name: fake_arm_right_controller
+    joints:
+      - right_shoulder_joint_0
+      - right_shoulder_joint_1
+      - right_shoulder_joint_2
+      - right_shoulder_joint_3
+      - right_elbow_joint_0
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+  - name: fake_arm_left_controller
+    joints:
+      - left_shoulder_joint_0
+      - left_shoulder_joint_1
+      - left_shoulder_joint_2
+      - left_shoulder_joint_3
+      - left_elbow_joint_0
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+  - name: fake_head_controller
+    joints:
+      - head_joint_0
+      - head_joint_1
+      - head_joint_2
+      - head_joint_3
+  - name: fake_trunk_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+  - name: fake_head_xtion_controller
+    joints:
+      []
+  - name: fake_gripper_right_controller
+    joints:
+      - right_gripper_forefinger_joint_0
+      - right_gripper_littlefinger_joint_0
+      - right_gripper_thumb_joint_0
+  - name: fake_gripper_left_controller
+    joints:
+      - left_gripper_forefinger_joint_0
+      - left_gripper_littlefinger_joint_0
+      - left_gripper_thumb_joint_0
+  - name: fake_trunk_with_arm_right_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+      - right_shoulder_joint_0
+      - right_shoulder_joint_1
+      - right_shoulder_joint_2
+      - right_shoulder_joint_3
+      - right_elbow_joint_0
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+  - name: fake_dual_arm_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+      - left_shoulder_joint_0
+      - left_shoulder_joint_1
+      - left_shoulder_joint_2
+      - left_shoulder_joint_3
+      - left_elbow_joint_0
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+      - right_shoulder_joint_0
+      - right_shoulder_joint_1
+      - right_shoulder_joint_2
+      - right_shoulder_joint_3
+      - right_elbow_joint_0
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+  - name: fake_trunk_with_arm_right_head_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+      - head_joint_0
+      - head_joint_1
+      - head_joint_2
+      - head_joint_3
+      - right_shoulder_joint_0
+      - right_shoulder_joint_1
+      - right_shoulder_joint_2
+      - right_shoulder_joint_3
+      - right_elbow_joint_0
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+  - name: fake_trunk_with_arm_left_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+      - left_shoulder_joint_0
+      - left_shoulder_joint_1
+      - left_shoulder_joint_2
+      - left_shoulder_joint_3
+      - left_elbow_joint_0
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+  - name: fake_trunk_with_arm_left_head_controller
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+      - head_joint_0
+      - head_joint_1
+      - head_joint_2
+      - head_joint_3
+      - left_shoulder_joint_0
+      - left_shoulder_joint_1
+      - left_shoulder_joint_2
+      - left_shoulder_joint_3
+      - left_elbow_joint_0
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+  - name: fake_gripper_right_thumb_controller
+    joints:
+      - right_gripper_thumb_joint_0
+  - name: fake_gripper_right_forefinger_controller
+    joints:
+      - right_gripper_forefinger_joint_0
+  - name: fake_gripper_right_littlefinger_controller
+    joints:
+      - right_gripper_littlefinger_joint_0
+  - name: fake_gripper_left_thumb_controller
+    joints:
+      - left_gripper_thumb_joint_0
+  - name: fake_gripper_left_forefinger_controller
+    joints:
+      - left_gripper_forefinger_joint_0
+  - name: fake_gripper_left_littlefinger_controller
+    joints:
+      - left_gripper_littlefinger_joint_0
+  - name: fake_hand_right_controller
+    joints:
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+  - name: fake_hand_left_controller
+    joints:
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+  - name: fake_right_bottle_mouth_controller
+    joints:
+      - right_bottle_mouth_joint_x
+      - right_bottle_mouth_joint_y
+      - right_bottle_mouth_joint_z
+  - name: fake_left_bottle_mouth_controller
+    joints:
+      - left_bottle_mouth_joint_x
+      - left_bottle_mouth_joint_y
+      - left_bottle_mouth_joint_z

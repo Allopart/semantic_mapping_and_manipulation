@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>GT</name>
+    <name>gt</name>
+    <name>green_triangle</name>
+    <real_name>Green Triangle Toy</real_name>
+    <collision>
+        <box>
+            <dimension x="0.04" y="0.08" z="0.08"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.04"/>
+                <rpy      r="0.785" p="0.00" y="0.00"/>
+            </pose>
+        </box>
+    </collision>
+    <behavior>
+        <approach_right_point x="-0.02" y="0.00" z="0.12"/>
+        <put_point     x="0.00" y="0.00" z="0.20"/>
+        <grasp_point    x="0.005" y="0.00" z="0.030"/>
+    </behavior>
+</object>
+

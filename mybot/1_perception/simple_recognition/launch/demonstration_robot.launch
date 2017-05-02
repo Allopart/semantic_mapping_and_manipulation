@@ -1,0 +1,31 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg name="path" default="~/objects"/>
+  <arg name="thermal" default="false" />
+  <arg name="demonstration" default="~/demonstration"/> 
+
+  <arg name="load" default="false" /> 
+    <!-- 1) load==true: load image from the demonstration folder-->
+    <!-- 2) load==false:load image from the camera              -->
+
+  <arg name="save" default="false" /> 
+    <!-- 1) save==true: save the dataset into demonstration folder-->
+    <!-- 2) save==false:just display the result -->
+
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <node name="plane_normal" pkg="simple_recognition" type="plane_normal" launch-prefix="$(arg launch_prefix)" /> 
+
+  <node name="recognition" pkg="simple_recognition" type="demonstration_robot" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="lua_files" value="$(find simple_recognition)/Lua/"/>
+  	<param name="setup_files" value="$(arg path)/"/>
+  	<param name="demonstration_files" value="$(arg demonstration)/"/>
+  	<param name="parameter_files" value="$(find simple_recognition)/setup/"/>
+    <param name="thermal_mode" type="bool" value="$(arg thermal)" />
+    <param name="load_mode" type="bool" value="$(arg load)" />
+    <param name="save_mode" type="bool" value="$(arg save)" />
+  </node>
+
+</launch>

@@ -1,0 +1,59 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+
+  <arg name="port_image" default="3213"/>
+  <arg name="port_depth" default="3214"/>
+
+  <arg name="head" default="/" />
+
+  <group ns="$(arg head)">
+    <node name="rgbd_receiver" pkg="rgbd_streamer" type="receiver" respawn="true" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="server_ip" value="192.168.51.100"/>
+      <param name="fx_vga" value="534.912739751989"/>
+      <param name="fy_vga" value="533.854358032728"/>
+      <param name="cx_vga" value="330.985394535914 "/>
+      <param name="cy_vga" value="228.556435595447"/>
+      <param name="port_image_" value="$(arg port_image)"/>
+      <param name="port_depth_" value="$(arg port_depth)"/>
+      <param name="head_" value="$(arg head)"/>
+    </node>
+
+    <node pkg="nodelet" type="nodelet" args="manager" name="nodelet_manager" output="screen"/>
+    
+    <node pkg="nodelet" type="nodelet" name="metric_rect" 
+          args="load depth_image_proc/convert_metric nodelet_manager --no-bond">
+      <remap from="image_raw" to="$(arg head)/rgbd_receiver/depth_registered/image_raw"/>
+      <remap from="image" to="$(arg head)/rgbd_receiver/depth_registered/image_rect"/>
+    </node>
+    <node pkg="nodelet" type="nodelet" name="cloudify"
+          args="load depth_image_proc/point_cloud_xyz nodelet_manager --no-bond">
+      <remap from="camera_info" to="$(arg head)/rgbd_receiver/depth_registered/camera_info"/>
+      <remap from="image_rect" to="$(arg head)/rgbd_receiver/depth_registered/image_raw"/>
+      <remap from="points" to="$(arg head)/rgbd_receiver/depth_registered/points"/>
+    </node>
+
+    <node pkg="nodelet" type="nodelet" name="cloudify_with_max"
+          args="load depth_image_proc/point_cloud_xyz nodelet_manager --no-bond">
+      <remap from="camera_info" to="$(arg head)/rgbd_receiver/depth_registered_with_max/camera_info"/>
+      <remap from="image_rect" to="$(arg head)/rgbd_receiver/depth_registered_with_max/image_raw"/>
+      <remap from="points" to="$(arg head)/rgbd_receiver/depth_registered_with_max/points"/>
+    </node>
+
+
+     <node pkg="nodelet" type="nodelet" name="cloudify_with_color"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager --no-bond">
+      <remap from="rgb/camera_info" to="$(arg head)/rgbd_receiver/rgb/camera_info"/>
+      <remap from="rgb/image_rect_color" to="$(arg head)/rgbd_receiver/rgb/image_rect_color"/>
+      <remap from="depth_registered/image_rect" to="$(arg head)/rgbd_receiver/depth_registered/image_rect"/>
+      <remap from="depth_registered/points" to="$(arg head)/rgbd_receiver/depth_registered/color_points"/>
+    </node>
+
+
+  </group>
+  
+
+</launch>

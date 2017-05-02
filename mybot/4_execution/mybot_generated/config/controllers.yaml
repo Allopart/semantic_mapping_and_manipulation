@@ -1,0 +1,65 @@
+controller_list:
+  - name: arm_left_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - left_shoulder_joint_0
+      - left_shoulder_joint_1
+      - left_shoulder_joint_2
+      - left_shoulder_joint_3
+      - left_elbow_joint_0
+      - left_wrist_joint_0
+      - left_wrist_joint_1
+      - left_wrist_joint_2
+      - left_bottle_mouth_joint_x
+      - left_bottle_mouth_joint_y
+      - left_bottle_mouth_joint_z
+  - name: arm_right_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - right_shoulder_joint_0
+      - right_shoulder_joint_1
+      - right_shoulder_joint_2
+      - right_shoulder_joint_3
+      - right_elbow_joint_0
+      - right_wrist_joint_0
+      - right_wrist_joint_1
+      - right_wrist_joint_2
+      - right_bottle_mouth_joint_x
+      - right_bottle_mouth_joint_y
+      - right_bottle_mouth_joint_z
+  - name: torso_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - waist_joint_0
+      - waist_joint_1
+  - name: head_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - head_joint_0
+      - head_joint_1
+      - head_joint_2
+      - head_joint_3
+  - name: gripper_right_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - right_gripper_forefinger_joint_0
+      - right_gripper_littlefinger_joint_0
+      - right_gripper_thumb_joint_0
+  - name: gripper_left_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - left_gripper_thumb_joint_0
+      - left_gripper_forefinger_joint_0
+      - left_gripper_littlefinger_joint_0

@@ -1,0 +1,14 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <node name="accumulate_old" pkg="simple_recognition_old" type="accumulate_old" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="lua_files" value="$(find simple_recognition_old)/Lua/"/>
+    <param name="object_files" value="$(find simple_recognition_old)/objects/"/>
+	<param name="setup_files" value="$(find simple_recognition_old)/setup/"/>
+  </node>
+
+
+</launch>

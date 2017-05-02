@@ -1,0 +1,12 @@
+bottle_mouth_left_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - left_bottle_mouth_joint_x
+    - left_bottle_mouth_joint_y
+    - left_bottle_mouth_joint_z
+
+
+  state_publish_rate:  20            # Override default
+  action_monitor_rate: 20            # Override default
+  stop_trajectory_duration: 0        # Override default
+

@@ -1,0 +1,36 @@
+<launch>
+
+    <!-- Camera description  -->
+    <include file="$(find rgbd_camera_util)/launch/asus.launch"/>
+    <include file="$(find rgbd_camera_util)/launch/display.launch"/>
+
+    <!-- OpenNI2 
+		<include file="$(find openni2_launch)/launch/openni2.launch"/>
+    -->
+
+
+		<!-- FCN launcher -->
+		<node name="fcn_launcher" pkg="semantic_mapping" type="fcn_launcher.py" /> 
+
+    
+		<!-- Object detection  
+		<node pkg="dn_object_detect" type="dn_object_detect" name="dn_object_detect" output="screen">
+    	<param name="camera" type="str" value="/camera/rgb/image_rect_color"/>
+    	<param name="_image_transport" type="str" value="compressed"/>
+    	<param name="yolo_config" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/cfg/tiny-coco.cfg"/>
+    	<param name="yolo_model" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/weights/tiny-coco.weights"/>
+    </node> -->
+
+
+    <!-- YOLO launcher 
+    <node name="yolo" pkg="darknet_ros" type="ROS_interface" /> 
+    -->
+
+  	<!-- Generate PCL for semantic map -->
+ 	 <include file="$(find semantic_mapping)/launch/image_proc.launch"/> 
+
+  	<!-- Run Rviz and load the default config to see the state of the move_group node -->
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_mapping)/rviz/sem_map.rviz"/> 
+
+
+</launch>

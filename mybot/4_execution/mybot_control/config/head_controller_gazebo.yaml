@@ -1,0 +1,20 @@
+head_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - head_joint_0
+    - head_joint_1
+    - head_joint_2
+    - head_joint_3
+
+  gains:
+    head_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    head_joint_1: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    head_joint_2: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    head_joint_3: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+
+  state_publish_rate:  10            # Override default
+  action_monitor_rate: 10            # Override default
+  stop_trajectory_duration: 0        # Override default
+
+
+

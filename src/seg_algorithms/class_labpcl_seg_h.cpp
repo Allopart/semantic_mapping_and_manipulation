@@ -1,0 +1,188 @@
+#include <ros/callback_queue.h>
+#include <message_filters/subscriber.h>
+#include <message_filters/synchronizer.h>
+#include <message_filters/time_synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
+#include <message_filters/sync_policies/exact_time.h>
+#include <boost/bind.hpp>
+// PCL specific includes
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_types.h>
+#include <pcl/PCLPointCloud2.h>
+#include <pcl/conversions.h>
+#include <pcl/console/time.h>
+#include <pcl/common/transforms.h>
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/ModelCoefficients.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/extract_indices.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl_ros/transforms.h>
+#include <pcl_ros/point_cloud.h>
+#include <pcl/surface/concave_hull.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/Image.h>
+#include <geometry_msgs/PolygonStamped.h>
+#include <vector>
+#include <algorithm>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <iostream>
+#include <cmath> 
+#include <stdio.h>
+#include <list>
+#include <iterator>
+#include <string>
+
+
+#include "dn_object_detect/DetectedObjects.h"
+#include "semantic_mapping/LabelledPointCloud2.h"
+
+using namespace sensor_msgs;
+using namespace geometry_msgs;
+using namespace message_filters;
+using namespace pcl;
+using namespace cv;
+using namespace std;
+
+typedef pcl::PointXYZ PointT;
+
+ros::NodeHandle* nhPtr; // Give global access to the nodeHandle
+ros::Publisher pcl_pub_result;
+ros::Publisher labpcl_seg_pub;
+
+
+std::string list_plane_h ("bench couch bed diningtable toilet pizza");
+
+
+void segmentation_callback(const semantic_mapping::LabelledPointCloud2::ConstPtr& pcl_ptr)
+{
+
+	// Get mask data
+	std::string className = pcl_ptr->label;
+  // Remove spaces from className
+  className.erase (std::remove (className.begin(), className.end(), ' '), className.end());
+
+		// Check lists to see what clustering method to use
+	std::size_t found_plane_h = list_plane_h.find(className);
+
+  // *************** Planar_h segmentation ************** 
+	
+	if (found_plane_h!=std::string::npos) {
+
+		//ROS_INFO("%s - Planar_h\n", className.c_str());
+
+		// Create class-specific publisher
+		std::string topicName_result = "/pcl_results/"+ className;
+		pcl_pub_result = nhPtr->advertise<sensor_msgs::PointCloud2>(topicName_result, 1);
+
+		sensor_msgs::PointCloud2 pcl_helper;
+		pcl_helper = pcl_ptr->pcl;
+
+		// Convert to XYZ format
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_xyz(new pcl::PointCloud<pcl::PointXYZ>);
+		pcl::moveFromROSMsg(pcl_helper, *cloud_xyz);
+
+		// Build a passthrough filter to remove spurious NaNs
+		pcl::PassThrough<PointT> pass;
+		pcl::PointCloud<PointT>::Ptr cloud_filtered (new pcl::PointCloud<PointT>);
+		pass.setInputCloud (cloud_xyz);
+		pass.setFilterFieldName ("z");
+		pass.setFilterLimits (0.1, 5.0);
+		pass.filter (*cloud_filtered);
+		/*pass.setInputCloud (cloud_filtered);
+		pass.setFilterFieldName ("y");
+		pass.setFilterLimits (0, 2);
+		pass.filter (*cloud_filtered);*/
+	//				std::cerr << "PointCloud after filtering has: " << cloud_filtered->points.size () << " data points." << std::endl;
+	 	
+		if (cloud_filtered->points.size() < 5) {
+			ROS_INFO("Object too far");
+			return;
+		}
+
+		
+		// Initialize planar segmentation 
+		pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
+		pcl::PointIndices::Ptr inliers (new pcl::PointIndices);
+		pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_plane_h (new     pcl::PointCloud<pcl::PointXYZ> ());
+
+		/// Create the segmentation object
+		pcl::SACSegmentation<pcl::PointXYZ> seg;
+		//Eigen::Vector3f axis = Eigen::Vector3f(0.0,0.0,1.0); 
+		//seg.setAxis(axis); 
+		//seg.setEpsAngle((30*3.14)/180); 
+		// Optional
+		seg.setOptimizeCoefficients (true);
+		// Mandatory
+		seg.setModelType (pcl::SACMODEL_PARALLEL_PLANE);
+		seg.setMethodType (pcl::SAC_RANSAC);
+		//seg.setMaxIterations (100);
+		seg.setDistanceThreshold (0.005);
+		seg.setInputCloud (cloud_filtered);
+		seg.segment (*inliers, *coefficients);
+   
+    if (inliers->indices.size () == 0)
+    {
+      ROS_INFO ("Could not estimate a planar model for the given dataset.");
+      return;
+    }
+
+		// Extract the planar inliers from the input cloud
+		pcl::ExtractIndices<pcl::PointXYZ> extract;
+		extract.setInputCloud (cloud_filtered);
+		extract.setIndices (inliers);
+		extract.setNegative (false);
+		extract.filter (*cloud_plane_h);
+
+		// Publish the inlier data 
+		cloud_plane_h->header.frame_id = "xtion_rgb_optical_frame";
+    ros::Time time_st = ros::Time::now ();
+		cloud_plane_h->header.stamp = time_st.toNSec()/1e3;
+		pcl_pub_result.publish (cloud_plane_h);
+    
+
+    // Publish labelled pointcloud
+    semantic_mapping::LabelledPointCloud2 lab_pcl;
+    sensor_msgs::PointCloud2 pcl_help;
+    pcl::toROSMsg(*cloud_plane_h,pcl_help);
+    lab_pcl.pcl=pcl_help;
+    lab_pcl.label=className;
+		labpcl_seg_pub.publish (lab_pcl);
+    
+		return;
+	} // END OF PLANAR_H SEGMENTATION
+
+}
+
+
+int main(int argc, char** argv)
+{
+
+  sleep(15);
+  ros::init(argc, argv, "class_lasbpcl_seg_h");
+
+  ros::NodeHandle nh;
+  nhPtr = & nh; // Give global access to this nodeHandle
+
+// ------------ Subscribers --------
+
+  ros::Subscriber pcl_sub = nh.subscribe("/class/lab_pcl/full", 1, segmentation_callback);
+
+// ------------ Publishers -----------
+
+  labpcl_seg_pub = nh.advertise<semantic_mapping::LabelledPointCloud2>("/class/lab_pcl/segmented", 1);
+
+
+  ros::spin ();
+  return 0;
+
+}

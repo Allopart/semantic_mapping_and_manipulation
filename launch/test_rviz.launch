@@ -1,0 +1,25 @@
+<launch>
+
+		<!-- Camera description  -->
+    <include file="$(find rgbd_camera_util)/launch/asus.launch"/>
+    <include file="$(find rgbd_camera_util)/launch/display.launch"/>
+
+		<!-- Generate colored PCL -->
+    <node pkg="nodelet" type="nodelet" args="manager" name="nodelet_manager" output="screen"/>
+
+    <node pkg="nodelet" type="nodelet" name="my_cloudify_with_color"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager no-bond">
+      <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
+      <remap from="rgb/image_rect_color" to="/camera/rgb/image_rect_color"/> 
+      <remap from="depth_registered/image_rect" to="/camera/depth/image_rect_raw"/>
+      <remap from="depth_registered/points" to="/original_colored_pcl"/>
+    </node> 
+
+    <!-- Test planar segmentration -->
+    <node pkg="testing" type="planar_segm" name="planar_segm"  output="screen" respawn="true"/> 
+
+    <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_mapping)/rviz/CNN_clust.rviz"/> 
+
+
+</launch>

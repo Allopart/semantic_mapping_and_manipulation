@@ -1,0 +1,11 @@
+<launch>
+
+<arg name="debug" default="false" />
+<arg unless="$(arg debug)" name="launch_prefix" value="" />
+<arg if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+<node name="lfd" pkg="simple_recognition_old" type="lfd" output="screen" launch-prefix="$(arg launch_prefix)">
+<param name="lua_files" value="$(find simple_recognition_old)/RNN/"/>
+</node>
+
+</launch>

@@ -1,0 +1,17 @@
+gripper_right_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - right_gripper_forefinger_joint_0
+    - right_gripper_littlefinger_joint_0
+    - right_gripper_thumb_joint_0
+
+  gains:
+    right_gripper_forefinger_joint_0: {p: 10.0, d: 5.0, i: 2.0, i_clamp: 0.0}
+    right_gripper_littlefinger_joint_0: {p: 10.0, d: 5.0, i: 2.0, i_clamp: 0.0}
+    right_gripper_thumb_joint_0: {p: 10.0, d: 5.0, i: 2.0, i_clamp: 0.0}
+
+  state_publish_rate:  10            # Override default
+  action_monitor_rate: 10            # Override default
+  stop_trajectory_duration: 0        # Override default
+
+

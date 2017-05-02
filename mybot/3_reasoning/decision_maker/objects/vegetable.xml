@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>VEGETABLE</name>
+    <name>vegetable</name>
+    <name>loc_vegetable</name>
+    <name>Vegetable</name>
+    <real_name>Vegetable</real_name>
+    <collision>
+        <box>
+            <dimension x="0.06" y="0.17" z="0.06"/>
+            <pose>
+                <position x="0.01" y="0.00" z="0.03"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </box>
+    </collision>
+    <behavior>
+        <approach_point x="0.00" y="0.00" z="0.12"/>
+        <put_right_point     x="0.00" y="-0.03" z="0.18"/>
+        <grasp_point    x="0.01" y="0.00" z="0.03"/>
+    </behavior>
+</object>
+

@@ -1,0 +1,11 @@
+<launch>
+  <include file="$(find gaze_selection)/launcher/gaze_selection.launch">
+    <arg name="head" value="/head_left" />
+  </include>
+
+  <include file="$(find gaze_selection)/launcher/gaze_selection.launch">
+    <arg name="head" value="/head_right" />
+  </include>
+</launch>
+
+

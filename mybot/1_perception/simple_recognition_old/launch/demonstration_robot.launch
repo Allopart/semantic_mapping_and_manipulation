@@ -1,0 +1,18 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <node name="demonstration_robot" pkg="simple_recognition_old" type="demonstration_robot" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="lua_files" value="$(find simple_recognition_old)/Lua/"/>
+    <param name="object_files" value="$(find simple_recognition_old)/objects/"/>
+  	<param name="setup_files" value="$(find simple_recognition_old)/setup/"/> 
+    <param name="RNN_files" value="$(find simple_recognition_old)/RNN/"/>
+    <param name="thermalMode" value="off"/>
+    <param name="memory_module" value="/deep_art"/>
+  </node>
+
+
+</launch>
+

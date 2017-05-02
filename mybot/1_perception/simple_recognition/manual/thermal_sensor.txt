@@ -1,0 +1,15 @@
+==================================================================
+How to turn on "thermal sensor"
+==================================================================
+
+1. Connect to beaglebone using "ssh"
+   >> ssh -X debian@192.168.7.2  
+
+2. Execute "bbb" 
+   >> bbb
+
+3. In PC, launch the thermal_streamer
+   >> roslaunch thermal_streamer thermal_streamer.launch
+
+4. Launch the recognition 
+   >> roslaunch simple_recognition recognition.launch thermal:=true

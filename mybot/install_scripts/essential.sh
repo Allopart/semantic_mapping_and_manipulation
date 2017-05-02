@@ -1,0 +1,1 @@
+sudo apt-get install -y ros-indigo-costmap-2d ros-indigo-moveit ros-indigo-controller-manager ros-indigo-move-base ros-indigo-urg-node ros-indigo-map-server ros-indigo-control-toolbox ros-indigo-transmission-interface ros-indigo-ros-controllers ros-indigo-gazebo-ros-control ros-indigo-openni2-launch ros-indigo-shape-tools 

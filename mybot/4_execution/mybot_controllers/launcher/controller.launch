@@ -1,0 +1,20 @@
+<launch>
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+
+  <param name="robot_description"  command="cat '$(find mybot_description)/urdf/mybot.urdf'" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+  <param name="use_gui" value="true" />
+  <node name="mybot_controller" ns="/"  pkg="mybot_controllers" type="mybot_controller" output="screen" launch-prefix="$(arg launch_prefix)"/>
+
+  <include file="$(find mybot_control)/launch/mybot_moveit_control.launch" />
+
+
+  <node name="urg_node" pkg="urg_node" type="urg_node" output="screen">
+    <param name="serial_port" value="/dev/ttyACM0" />
+    <param name="serial_baud" value="115200" />
+    <param name="frame_id" value="hokuyo_link" />
+  </node>
+</launch>

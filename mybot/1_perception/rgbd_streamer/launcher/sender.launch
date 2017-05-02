@@ -1,0 +1,21 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <arg name="device_uri" default="" />
+  <arg name="port_image" default="3213" />
+  <arg name="port_depth" default="3214" />
+
+  <arg name="head" default="/"/>
+
+
+  <group ns="$(arg head)">
+    <node name="rgbd_sender" pkg="rgbd_streamer" type="sender" respawn="true" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="device_uri_" value="$(arg device_uri)"/>
+      <param name="port_image_" value="$(arg port_image)"/>
+      <param name="port_depth_" value="$(arg port_depth)"/>
+    </node>
+  </group>
+</launch>

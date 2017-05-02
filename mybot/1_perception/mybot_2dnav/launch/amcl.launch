@@ -1,0 +1,15 @@
+<launch>
+	<master auto="start"/>
+	<param name="/use_sim_time" value="false"/>
+
+    <node pkg="amcl" type="amcl" name="amcl">
+      <!-- Publish scans from best pose at a max of 10 Hz -->
+      <param name="odom_model_type" value="omni"/>
+      <param name="odom_frame_id" value="odom"/>
+      <param name="base_frame_id" value="base_footprint"/>
+    </node>
+	<include file="$(find mybot_2dnav)/config/move_base.xml"/>
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find mybot_2dnav)/config/my_laser_config.yaml" />
+    </node>
+</launch>

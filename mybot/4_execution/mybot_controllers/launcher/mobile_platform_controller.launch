@@ -1,0 +1,4 @@
+<launch>
+    <node name="mobile_platform_controller" ns="/"  pkg="mybot_controllers" type="mobile_platform_controller" output="screen"/>
+
+</launch>

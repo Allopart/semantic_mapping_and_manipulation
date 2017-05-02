@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>PinkCup</name>
+    <name>pink_cup</name>
+    <name>PINK_CUP</name>
+    <real_name>Pink Cup</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.035" height="0.11"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.055"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_right_point x="0.00" y="-0.02" z="0.08"/>
+        <put_right_point     x="0.1" y="-0.10" z="0.15"/>
+        <grasp_point    x="0.00" y="0.00" z="0.07"/>
+    </behavior>
+</object>
+

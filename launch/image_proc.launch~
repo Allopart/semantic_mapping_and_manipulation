@@ -1,0 +1,21 @@
+<!-- Launch in the camera namespace containing "image_raw" and "camera_info" -->
+<launch>
+
+<!-- Color PCL -->
+
+     <node pkg="nodelet" type="nodelet" args="manager" name="nodelet_manager" output="screen"/>
+
+     <node pkg="nodelet" type="nodelet" name="my_cloudify_with_color"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager --no-bond">
+      <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
+      <remap from="rgb/image_rect_color" to="/sem_img"/> 
+<!--/camera/rgb/image_rect_color -->
+      <remap from="depth_registered/image_rect" to="/sem_depth"/>
+<!--/camera/depth_registered/sw_registered/image_rect" -->
+      <remap from="depth_registered/points" to="/sem_map_pcl"/>
+    </node>
+  
+
+  
+
+</launch>

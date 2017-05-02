@@ -1,0 +1,30 @@
+arm_right_controller:
+  type: "posvel_controllers/MybotJointTrajectoryController"
+  joints:
+    - right_shoulder_joint_0
+    - right_shoulder_joint_1
+    - right_shoulder_joint_2
+    - right_shoulder_joint_3
+    - right_elbow_joint_0
+    - right_wrist_joint_0
+    - right_wrist_joint_1
+    - right_wrist_joint_2
+
+  constraints:
+    goal_time: 2.0
+    stopped_velocity_tolerance: 0.2
+
+  gains:
+    right_shoulder_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_shoulder_joint_1: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_shoulder_joint_2: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_shoulder_joint_3: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_elbow_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_1: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_2: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+
+  state_publish_rate:  20            # Override default
+  action_monitor_rate: 20            # Override default
+  stop_trajectory_duration: 0        # Override default
+

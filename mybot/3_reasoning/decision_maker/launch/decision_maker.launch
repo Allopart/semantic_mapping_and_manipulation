@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <arg name="head" default="/" />
+
+  <node name="decision_maker" pkg="decision_maker" type="decision_maker_with_behavior" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="head_" value="$(arg head)" />
+    <param name="memory_module" value="/simple_memory_node" />
+    <param name="object_path" value="$(find decision_maker)/objects" />
+    <param name="save_path" value="$(find decision_maker)/saved_path" />
+  </node>
+</launch>
+
+

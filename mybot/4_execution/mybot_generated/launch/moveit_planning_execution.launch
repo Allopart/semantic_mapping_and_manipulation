@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find mybot_generated)/launch/move_group.launch">
+    <arg name="publish_monitored_planning_scene" value="true" />
+  </include>
+  <include file="$(find mybot_generated)/launch/moveit_rviz.launch"/>
+</launch>

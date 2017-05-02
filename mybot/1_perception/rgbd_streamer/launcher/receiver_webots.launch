@@ -1,0 +1,24 @@
+<launch>
+
+  <node name="rgbd_receiver" pkg="rgbd_streamer" type="receiver" respawn="true" output="screen">
+    <param name="server_ip" value="127.0.0.1"/>
+    <param name="fx_vga" value="534.912739751989"/>
+    <param name="fy_vga" value="533.854358032728"/>
+    <param name="cx_vga" value="320"/>
+    <param name="cy_vga" value="240"/>
+  </node>
+
+  <node pkg="nodelet" type="nodelet" args="manager" name="nodelet_manager" output="screen"/>
+  <node pkg="nodelet" type="nodelet" name="metric_rect" 
+        args="load depth_image_proc/convert_metric nodelet_manager --no-bond">
+    <remap from="image_raw" to="/rgbd_receiver/depth_registered/image_raw"/>
+    <remap from="image" to="/rgbd_receiver/depth_registered/image_rect"/>
+  </node>
+  <node pkg="nodelet" type="nodelet" name="cloudify"
+        args="load depth_image_proc/point_cloud_xyz nodelet_manager --no-bond">
+    <remap from="camera_info" to="/rgbd_receiver/depth_registered/camera_info"/>
+    <remap from="image_rect" to="/rgbd_receiver/depth_registered/image_raw"/>
+    <remap from="points" to="/rgbd_receiver/depth_registered/points"/>
+  </node>
+
+</launch>

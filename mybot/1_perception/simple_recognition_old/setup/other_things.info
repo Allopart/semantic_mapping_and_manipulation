@@ -1,0 +1,16 @@
+#rootDir
+~/objects_yhyoo/other_things
+
+# object' name & color for displaying (BGR order)
+CEREAL 0 0 255
+MILK 0 140 255
+BOTTLE 255 0 0
+#MUSTARD 0 255 255
+#VINEGAR 255 0 255
+#PEPPER 255 255 0
+
+# number of channels
+3
+
+# iteration for leraning
+100

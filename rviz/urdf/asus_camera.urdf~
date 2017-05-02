@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<robot name="xtion"> 
+
+      <link name="world"/>
+
+      <joint name="xtion_joint" type="fixed">
+        <parent link="world"/>
+        <child link="xtion_link"/>
+      </joint>
+      
+      <link name="xtion_link">
+        <inertial>
+          <mass value="0.200" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="5.8083e-4" ixy="0" ixz="0" iyy="3.0833e-5" iyz="0" izz="5.9083e-4" />
+        </inertial>
+        <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.035 0.185 0.025"/>
+          </geometry>
+        </collision>
+      </link>
+
+      <joint name="xtion_depth_joint" type="fixed">
+        <origin xyz="0.0 0.049 0.0" rpy="0 0 0" />
+        <parent link="xtion_link" />
+        <child link="xtion_depth_frame"/>
+      </joint>
+
+      <link name="xtion_depth_frame"/>
+
+      <joint name="xtion_depth_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679" />
+        <parent link="xtion_depth_frame" />
+        <child link="xtion_depth_optical_frame"/>
+      </joint>
+
+      <link name="xtion_depth_optical_frame"/>
+
+      <joint name="xtion_rgb_joint" type="fixed">
+        <origin xyz="0.0 0.022 0.0" rpy="0 0 0" />
+        <parent link="xtion_link" />
+        <child link="xtion_rgb_frame"/>
+      </joint>
+
+      <link name="xtion_rgb_frame"/>
+
+      <joint name="xtion_rgb_optical_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="-1.57079632679 0.0 -1.57079632679" />
+        <parent link="xtion_rgb_frame" />
+        <child link="xtion_rgb_optical_frame"/>
+      </joint>
+
+      <link name="xtion_rgb_optical_frame"/>
+
+</robot>

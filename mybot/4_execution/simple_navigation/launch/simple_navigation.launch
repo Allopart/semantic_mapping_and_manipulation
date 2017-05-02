@@ -1,0 +1,9 @@
+<launch>
+    <master auto="start"/>
+    <include file="$(find mybot_2dnav)/config/move_base.xml"/>
+    <include file="$(find mybot_2dnav)/config/slam_gmapping.xml"/>
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+        <rosparam command="load" file="$(find mybot_2dnav)/config/my_laser_config.yaml" />
+    </node>
+    <node pkg="simple_navigation" type="simple_navigation_node" name="simple_navigation"/>
+</launch>

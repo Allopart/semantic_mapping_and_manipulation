@@ -1,0 +1,23 @@
+<launch>
+
+  <rosparam file="$(find mybot_control)/config/arm_left_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/arm_right_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/torso_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/head_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/gripper_right_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/gripper_left_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/mobile_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/joint_state_controller_webots.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/bottle_mouth_right_controller.yaml" command="load"/>
+  <rosparam file="$(find mybot_control)/config/bottle_mouth_left_controller.yaml" command="load"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/" args="torso_controller arm_left_controller arm_right_controller head_controller gripper_left_controller gripper_right_controller mobile_controller bottle_mouth_right_controller bottle_mouth_left_controller joint_state_controller"/>
+
+
+
+
+
+
+
+</launch>

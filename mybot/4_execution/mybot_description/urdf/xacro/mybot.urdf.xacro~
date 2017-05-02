@@ -1,0 +1,358 @@
+<?xml version="1.0"?>
+<robot name="mybot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="pi" value="3.1415926535897931" />
+  <xacro:property name="vel" value="${24.0*pi/180.0}" />  
+  <xacro:property name="eff" value="30.0" />  
+  <xacro:property name="damping" value="10.0" />  
+  <xacro:property name="vel_for_mobile" value="${60.0*pi/180.0}" />  
+  <xacro:property name="vel_for_mobile" value="${60.0*pi/180.0}" />  
+
+  <xacro:macro name="load_mesh" params="file_name">
+    <visual>
+      <geometry>
+        <mesh filename="package://mybot_description/dae/${file_name}.dae"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.8 0.8 0.8 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://mybot_description/dae/${file_name}.dae"/>
+      </geometry>
+    </collision>
+  </xacro:macro>
+
+  <xacro:macro name="floating_joint" params="parent child">
+    <joint name="${child}_joint" type="floating">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    <link name="${child}"/>
+  </xacro:macro>
+
+  <xacro:macro name="wheel_joint" params="index">
+    <joint name="wheel_joint_${index}" type="continuous">
+      <parent link="wheel_temp_${index}"/>
+      <child link="wheel_${index}"/>
+      <origin xyz="0.2752 0 0" rpy="0 0 0" />
+      <limit effort="7.0" velocity="${vel_for_mobile}"/>
+      <safety_controller k_velocity="${vel_for_mobile*0.9}" />
+      <dynamics damping="1.0" friction="0.0" />
+    </joint>
+    <link name="wheel_${index}">
+      <xacro:load_mesh file_name="wheel"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="prismatic_joint" params="parent child reflect max min *axis *origin">
+    <joint name="${child}_joint_${reflect}" type="prismatic">
+      <parent link="${parent}"/>
+      <child link="${child}_${reflect}"/>
+      <xacro:insert_block name="origin" />
+      <xacro:insert_block name="axis" />
+      <limit effort="${eff}" lower="${min}" upper="${max}" velocity="${vel*10}"/>
+      <dynamics damping="${damping}"/>
+    </joint>
+    <link name="${child}_${reflect}"/>
+  </xacro:macro>
+
+  <xacro:macro name="revolute_joint" params="parent child reflect max min *axis *origin">
+    <joint name="${child}_joint_${reflect}" type="revolute">
+      <parent link="${parent}"/>
+      <child link="${child}_${reflect}"/>
+      <xacro:insert_block name="origin" />
+      <xacro:insert_block name="axis" />
+      <limit effort="${eff}" lower="${min}" upper="${max}" velocity="${vel}"/>
+      <dynamics damping="${damping}"/>
+    </joint>
+    <link name="${child}_${reflect}">
+      <xacro:load_mesh file_name="${child}_${reflect}"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="revolute_mimic_joint" params="parent child reflect max min *axis *origin">
+    <joint name="${child}_joint_${reflect}" type="revolute">
+      <parent link="${parent}"/>
+      <child link="${child}_${reflect}"/>
+      <xacro:insert_block name="origin" />
+      <xacro:insert_block name="axis" />
+      <mimic joint="${child}_joint_0" multiplier="2"/>
+      <limit effort="${eff}" lower="${min}" upper="${max}" velocity="${vel}"/>
+      <dynamics damping="${damping}"/>
+    </joint>
+    <link name="${child}_${reflect}">
+      <xacro:load_mesh file_name="${child}_${reflect}"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="fixed_joint" params="name parent child *origin">
+    <joint name="${name}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+    <link name="${child}">
+      <xacro:load_mesh file_name="${child}"/>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="fixed_temp_joint" params="name parent child *origin">
+    <joint name="${name}" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+    <link name="${child}"/>
+  </xacro:macro>
+
+
+  <!-- BASE -->
+  <link name="base_footprint"/>
+  <xacro:fixed_joint name="base_footprint_joint" parent="base_footprint" child="base_mobile">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:fixed_joint>
+  <xacro:fixed_temp_joint name="base_mobile_joint"    parent="base_mobile"    child="base_wheel">
+    <origin xyz="0 0 0.103" rpy="0 0 0"/>
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_joint name="base_joint"           parent="base_mobile"    child="base_0">
+    <origin xyz="0 0 0.497" rpy="0 0 0"/>
+  </xacro:fixed_joint>
+  <xacro:fixed_temp_joint name="hokuyo_joint" parent="base_mobile" child="hokuyo_link">
+    <origin xyz="0.17062 0 0.239" rpy="0 0 0"/>
+  </xacro:fixed_temp_joint>
+
+
+  <!-- MOBILE PLATFORM -->
+  <xacro:fixed_temp_joint name="wheel_temp_joint_0" parent="base_wheel"    child="wheel_temp_0"> 
+    <origin xyz="0 0 0" rpy="0 0 ${pi*60/180.0}"/>
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="wheel_temp_joint_1" parent="base_wheel"    child="wheel_temp_1">
+    <origin xyz="0 0 0" rpy="0 0 ${-pi*60/180.0}"/>
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="wheel_temp_joint_2" parent="base_wheel"    child="wheel_temp_2">
+    <origin xyz="0 0 0" rpy="0 0 ${-pi}"/>
+  </xacro:fixed_temp_joint>
+  <xacro:wheel_joint index="0"/>
+  <xacro:wheel_joint index="1"/>
+  <xacro:wheel_joint index="2"/>
+
+  <!-- WAIST -->
+  <xacro:revolute_joint parent="base_0" child="waist" reflect="0" min="${pi*-45.0/180.0}" max="${pi*45.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="waist_0" child="waist" reflect="1" min="${pi*-30.0/180.0}" max="${pi*30.0/180.0}">
+    <origin xyz="0 0 0.099" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+
+
+  <!-- HEAD -->
+  <xacro:fixed_joint name="head_mount_joint" parent="waist_1" child="head_mount">
+    <origin xyz="0 0 0.398" rpy="0 0 0"/>
+  </xacro:fixed_joint>
+  <xacro:revolute_joint parent="head_mount" child="head" reflect="0" min="${-pi*80.0/180.0}" max="${pi*80.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="head_0" child="head" reflect="1" min="-0.34" max="1.04">
+    <origin xyz="0 0 0.075" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="head_1" child="head" reflect="2" min="-0.13" max="0.13">
+    <origin xyz="0 0 0.080" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="head_2" child="head" reflect="3" min="-0.08" max="0.08">
+    <origin xyz="0 0.0015 0" rpy="0 0 0"/>
+    <axis xyz="-1 0 0"/>
+  </xacro:revolute_joint>
+  <xacro:fixed_temp_joint name="head_rgbd_sensor" parent="head_3" child="xtion_link">
+    <origin xyz="0.045755 -0.038180 0.057544" rpy="0.024106 0.183337 0.020246" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="xtion_depth_joint" parent="xtion_link" child="xtion_depth_frame">
+    <origin xyz="0 0.049 0" rpy="0 0 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="xtion_depth_optical_joint" parent="xtion_depth_frame" child="xtion_depth_optical_frame">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="xtion_rgb_joint" parent="xtion_link" child="xtion_rgb_frame">
+    <origin xyz="0 0.022 0" rpy="0 0 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="xtion_rgb_optical_joint" parent="xtion_rgb_frame" child="xtion_rgb_optical_frame">
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+  </xacro:fixed_temp_joint>
+
+  <!-- RIGHT ARM -->
+  <xacro:revolute_joint parent="waist_1" child="right_shoulder" reflect="0" min="${-pi*60.0/180.0}" max="${pi*60.0/180.0}">
+    <origin xyz="0 -0.075 0.351" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_shoulder_0" child="right_shoulder" reflect="1" min="${-pi*90.0/180.0}" max="${pi*120.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_shoulder_1" child="right_shoulder" reflect="2" min="${-pi*0.0/180.0}" max="${pi*90.0/180.0}">
+    <origin xyz="0 -0.162 0" rpy="0 0 0"/>
+    <axis xyz="-1 0 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_shoulder_2" child="right_shoulder" reflect="3" min="${-pi*90.0/180.0}" max="${pi*30.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_shoulder_3" child="right_elbow" reflect="0" min="${-pi*0.0/180.0}" max="${pi*90.0/180.0}">
+    <origin xyz="0 0 -0.204" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_elbow_0" child="right_wrist" reflect="0" min="${-pi*120.0/180.0}" max="${pi*120.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_wrist_0" child="right_wrist" reflect="1" min="${-pi*60.0/180.0}" max="${pi*60.0/180.0}">
+    <origin xyz="0 0 -0.2735" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="right_wrist_1" child="right_wrist" reflect="2" min="${-pi*30.0/180.0}" max="${pi*30.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+
+  <!-- LEFT ARM -->
+  <xacro:revolute_joint parent="waist_1" child="left_shoulder" reflect="0" min="${-pi*60.0/180.0}" max="${pi*60.0/180.0}">
+    <origin xyz="0 0.075 0.351" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_shoulder_0" child="left_shoulder" reflect="1" min="${-pi*120.0/180.0}" max="${pi*90.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_shoulder_1" child="left_shoulder" reflect="2" min="${-pi*90.0/180.0}" max="${pi*0.0/180.0}">
+    <origin xyz="0 0.162 0" rpy="0 0 0"/>
+    <axis xyz="-1 0 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_shoulder_2" child="left_shoulder" reflect="3" min="${-pi*30.0/180.0}" max="${pi*90.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_shoulder_3" child="left_elbow" reflect="0" min="${-pi*90.0/180.0}" max="${pi*0.0/180.0}">
+    <origin xyz="0 0 -0.204" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_elbow_0" child="left_wrist" reflect="0" min="${-pi*120.0/180.0}" max="${pi*120.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 -1"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_wrist_0" child="left_wrist" reflect="1" min="${-pi*60.0/180.0}" max="${pi*60.0/180.0}">
+    <origin xyz="0 0 -0.2735" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+  </xacro:revolute_joint>
+  <xacro:revolute_joint parent="left_wrist_1" child="left_wrist" reflect="2" min="${-pi*30.0/180.0}" max="${pi*30.0/180.0}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+  </xacro:revolute_joint>
+
+
+
+  <!-- RIGHT GRIPPER -->
+  <xacro:fixed_joint name="right_gripper_parm_joint_0" parent="right_wrist_2" child="right_gripper_parm_0">
+    <origin xyz="0 0.06046 -0.14234" rpy="0.785 0 0" />
+  </xacro:fixed_joint>
+  <xacro:fixed_temp_joint name="right_gripper_parm_joint_1" parent="right_gripper_parm_0" child="right_gripper_parm_1">
+    <origin xyz="0 0 0" rpy="-0.785 0 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="right_gripper_parm_joint_2" parent="right_gripper_parm_0" child="right_gripper_parm_2">
+    <origin xyz="0 0 0.035" rpy="${-2*pi/3} ${pi/2} 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:revolute_joint parent="right_gripper_parm_1" child="right_gripper_thumb" reflect="0" min="${-pi*20.0/180.0}" max="${pi*10.0/180.0}">
+    <origin xyz="0 -0.03652 0.06381" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="right_gripper_thumb_0" child="right_gripper_thumb" reflect="1" min="${-pi*40.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 0.04698 -0.01639" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_mimic_joint>
+  <xacro:revolute_joint parent="right_gripper_parm_1" child="right_gripper_forefinger" reflect="0" min="${-pi*20.0/180.0}" max="${pi*10.0/180.0}">
+    <origin xyz="0 -0.06381 0.03652" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="right_gripper_forefinger_0" child="right_gripper_forefinger" reflect="1" min="${-pi*40.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 0.01639 -0.04698" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </xacro:revolute_mimic_joint>
+  <xacro:revolute_joint parent="right_gripper_parm_1" child="right_gripper_littlefinger" reflect="0" min="${-pi*10.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 -0.06381 0.03652" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="right_gripper_littlefinger_0" child="right_gripper_littlefinger" reflect="1" min="${-pi*20.0/180.0}" max="${pi*40.0/180.0}">
+    <origin xyz="0 0.01639 -0.04698" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_mimic_joint>
+
+
+
+  <!-- LEFT GRIPPER -->
+  <xacro:fixed_joint name="left_gripper_parm_joint_0" parent="left_wrist_2" child="left_gripper_parm_0">
+    <origin xyz="0 -0.06046 -0.14234" rpy="-0.785 0 0" />
+  </xacro:fixed_joint>
+  <xacro:fixed_temp_joint name="left_gripper_parm_joint_1" parent="left_gripper_parm_0" child="left_gripper_parm_1">
+    <origin xyz="0 0 0" rpy="0.785 0 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:fixed_temp_joint name="left_gripper_parm_joint_2" parent="left_gripper_parm_0" child="left_gripper_parm_2">
+    <origin xyz="0 0 0.035" rpy="${-2*pi/3} ${pi/2} 0" />
+  </xacro:fixed_temp_joint>
+  <xacro:revolute_joint parent="left_gripper_parm_1" child="left_gripper_thumb" reflect="0" min="${-pi*10.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 0.03652 0.06381" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="left_gripper_thumb_0" child="left_gripper_thumb" reflect="1" min="${-pi*20.0/180.0}" max="${pi*40.0/180.0}">
+    <origin xyz="0 -0.04698 -0.01639" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_mimic_joint>
+  <xacro:revolute_joint parent="left_gripper_parm_1" child="left_gripper_forefinger" reflect="0" min="${-pi*10.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 0.06381 0.03652" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="left_gripper_forefinger_0" child="left_gripper_forefinger" reflect="1" min="${-pi*20.0/180.0}" max="${pi*40.0/180.0}">
+    <origin xyz="0 -0.01639 -0.04698" rpy="0 0 0" />
+    <axis xyz="1 0 0" />
+  </xacro:revolute_mimic_joint>
+  <xacro:revolute_joint parent="left_gripper_parm_1" child="left_gripper_littlefinger" reflect="0" min="${-pi*20.0/180.0}" max="${pi*10.0/180.0}">
+    <origin xyz="0 0.06381 0.03652" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_joint>
+  <xacro:revolute_mimic_joint parent="left_gripper_littlefinger_0" child="left_gripper_littlefinger" reflect="1" min="${-pi*40.0/180.0}" max="${pi*20.0/180.0}">
+    <origin xyz="0 -0.01639 -0.04698" rpy="0 0 0" />
+    <axis xyz="-1 0 0" />
+  </xacro:revolute_mimic_joint>
+
+  <!-- BOTTLE MOUTH -->
+  <xacro:prismatic_joint parent="right_gripper_parm_0" child="right_bottle_mouth" reflect="x" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0" />
+  </xacro:prismatic_joint>
+  <xacro:prismatic_joint parent="right_bottle_mouth_x" child="right_bottle_mouth" reflect="y" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0" />
+  </xacro:prismatic_joint>
+  <xacro:prismatic_joint parent="right_bottle_mouth_y" child="right_bottle_mouth" reflect="z" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1" />
+  </xacro:prismatic_joint>
+  <xacro:prismatic_joint parent="left_gripper_parm_0" child="left_bottle_mouth" reflect="x" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0" />
+  </xacro:prismatic_joint>
+  <xacro:prismatic_joint parent="left_bottle_mouth_x" child="left_bottle_mouth" reflect="y" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 1 0" />
+  </xacro:prismatic_joint>
+  <xacro:prismatic_joint parent="left_bottle_mouth_y" child="left_bottle_mouth" reflect="z" min="-1.0" max="1.0">
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 1" />
+  </xacro:prismatic_joint>
+
+</robot>
+

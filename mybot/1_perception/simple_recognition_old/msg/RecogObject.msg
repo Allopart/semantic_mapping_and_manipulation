@@ -1,0 +1,3 @@
+string object_name
+geometry_msgs/PointStamped stamped_point
+bool is_selected

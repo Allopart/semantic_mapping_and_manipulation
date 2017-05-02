@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find behavior)/launcher/behavior.launch">
+    <arg name="head" value="/head_left" />
+  </include>
+</launch>

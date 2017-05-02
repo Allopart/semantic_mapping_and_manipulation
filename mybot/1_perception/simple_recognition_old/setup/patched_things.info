@@ -1,0 +1,13 @@
+# rootDir
+~/objects_yhyoo/patched_things
+
+# object' name & color for displaying (BGR order)
+BoxA 200 200 0 
+BoxB 200 200 0
+BoxC 200 200 0
+
+# number of channels
+1
+
+# iteration for learning
+1

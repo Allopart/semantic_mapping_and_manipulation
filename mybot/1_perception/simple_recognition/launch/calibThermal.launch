@@ -1,0 +1,11 @@
+<launch>
+
+  <arg name="debug" default="false" />
+  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+  <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+
+  <node name="calibThermal" pkg="simple_recognition" type="calibThermal" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="setup_files" value="$(find simple_recognition)/setup/"/>
+  </node>
+
+</launch>

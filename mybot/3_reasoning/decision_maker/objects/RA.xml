@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>RA</name>
+    <name>ra</name>
+    <name>red_arch</name>
+    <real_name>Red Arch Toy</real_name>
+    <collision>
+        <box>
+            <dimension x="0.06" y="0.10" z="0.05"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.02"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </box>
+    </collision>
+    <behavior>
+        <approach_point x="0.00" y="0.00" z="0.05"/>
+        <put_point     x="0.00" y="0.00" z="0.05"/>
+        <grasp_point    x="0.00" y="0.00" z="0.02"/>
+    </behavior>
+</object>
+

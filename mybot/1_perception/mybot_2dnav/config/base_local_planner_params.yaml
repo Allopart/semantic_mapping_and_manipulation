@@ -1,0 +1,39 @@
+TrajectoryPlannerROS:
+  # Set the acceleration limits of the robot
+  acc_lim_x: 0.01
+  acc_lim_y: 0.01
+  acc_lim_theta: 0.01 
+
+  # Set the velocity limits of the robot
+  max_vel_x: 0.5
+  min_vel_x: -0.5
+  may_vel_y: 0.5
+  min_vel_y: -0.5
+  max_trans_vel: 0.5
+  min_trans_vel: -0.5
+  max_vel_theta: 0.54
+  min_vel_theta: -0.54
+  min_in_place_vel_theta: 0.1
+  holonomic_robot: true
+
+  heading_scoring: false
+  heading_lookahead: 0.01
+
+  # Goal Tolerance 
+  yaw_goal_tolerance: 0.10
+  xy_goal_tolerance: 0.1
+  latch_xy_goal_tolerance: false
+
+  dwa: false
+
+
+  # Simulation parameter
+  sim_time: 1.7
+  sim_granularity: 0.025
+  vx_samples: 3
+  vy_samples: 3
+  vtheta_samples: 20
+  penalize_negative_x: false
+
+  #Eat up the plan as the robot moves along it
+  prune_plan: false

@@ -1,0 +1,50 @@
+<launch>
+
+	<!-- Start pcl registration for specified object -->
+    <node name="ICP_registration" pkg="semantic_mapping" type="ICP_registration" output="screen" respawn="true">
+			<param name="className" type="string" value="$(arg className)" />
+		</node>
+
+	<!-- Generate collision_object -->
+		<node name="BB_for_reg_pcl" pkg="semantic_mapping" type="BB_for_reg_pcl"  output="screen">
+			<param name="className" type="string" value="$(arg className)" />
+		</node>
+
+	<!-- Find grasping postions -->
+	  <node name="object_grasps" pkg="agile_grasp" type="find_grasps" output="screen">
+			<param name="className" type="string" value="$(arg className)" />
+ 	  	<param name="cloud_topic" type="string" value="$(arg topicName)"/>
+    	<param name="cloud_frame" value="/xtion_rgb_optical_frame" />
+    	<param name="cloud_type" value="0" />
+    	<param name="svm_file_name" value="$(find agile_grasp)/svm_032015_20_20_same" />
+    	<param name="num_samples" value="4000" />
+    	<param name="num_threads" value="4" />
+    	<param name="num_clouds" value="1" />
+			<!--<param name="finger_width" value="0.03" />-->
+			<!--<param name="hand_outer_diameter" value="0.11" />-->
+			<!--<param name="hand_depth" value="0.07" />-->
+			<!--<param name="init_bite" value="0.01" />-->
+			<!--<param name="hand_height" value="0.02" />-->
+			<rosparam param="workspace"> [-10, 10, -10, 10, -10, 10] </rosparam>
+    	<rosparam param="camera_pose"> [0, 0.445417, 0.895323, 0.215, 
+              1, 0, 0, -0.015, 
+              0, 0.895323, -0.445417, 0.23, 
+              0, 0, 0, 1] </rosparam> 
+    	<param name="min_inliers" value="10" />
+    	<param name="plotting" value="2" />
+    	<param name="marker_lifetime" value="10" /> 
+		</node>
+
+
+  <!-- Convert markers so that Moveit understands -->
+	  <node name="convert_grasp_to_pose" pkg="semantic_mapping" type="convert_grasp_to_pose.py" output="screen">
+			<param name="className" type="string" value="$(arg className)" />
+ 		</node>
+  
+	<!-- Plan to grasp (C++) --> 
+		<node name="move_arm_to_grasp" pkg="semantic_mapping" type="move_arm_to_grasp"  output="screen" respawn="true">
+			<param name="className" type="string" value="$(arg className)" />   
+   	</node>
+
+
+</launch>

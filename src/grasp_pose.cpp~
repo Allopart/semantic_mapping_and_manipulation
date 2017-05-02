@@ -1,0 +1,54 @@
+#include <ros/ros.h>
+#include <ros/callback_queue.h>
+#include <boost/bind.hpp>
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseArray.h>
+
+#include <moveit/move_group_interface/move_group.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit_msgs/DisplayRobotState.h>
+#include <moveit_msgs/DisplayTrajectory.h>
+#include <moveit_msgs/AttachedCollisionObject.h>
+#include <moveit_msgs/CollisionObject.h>
+
+#include <iostream>
+#include <cmath> 
+
+moveit::planning_interface::MoveGroup group("right_arm_with_trunk");
+moveit::planning_interface::MoveGroup::Plan my_plan;
+
+void grasp_callback(const geometry_msgs::PoseStamped my_grasp)
+{
+	group.setPoseTarget(my_grasp);
+  bool success = group.plan(my_plan);
+
+	ROS_INFO("Visualizing plan 1 (pose goal) %s",success?"":"FAILED");
+	/* Sleep to give Rviz time to visualize the plan. */
+	sleep(5.0);
+                                                                                    
+}
+
+
+int main(int argc, char** argv)
+{
+
+  sleep(15);
+  ros::init(argc, argv, "move_arm_to_grasp");
+
+  ros::NodeHandle nh;
+  
+ 
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+  ros::Publisher display_publisher = node_handle.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
+	moveit_msgs::DisplayTrajectory display_trajectory;
+  
+	// ------------ Subscribers --------
+
+  ros::Subscriber grasp_sub = nh.subscribe("/class/final_grasp", 1, grasp_callback);
+
+
+  ros::spin ();
+  return 0;
+
+}

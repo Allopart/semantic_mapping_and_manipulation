@@ -1,0 +1,20 @@
+How to use PCL 
+
+1. "Cloud", "Viewer" declaration 
+
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud; 
+
+* Initial setting
+  1) create "Viewer"  -> boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+  2) set "Viewer"     -> plaincode::setViewer(viewer, cv::Point(100,100), cv::Size(300,500), cv::Scalar(0,0,0));
+  3) create "Cloud"   -> cloud = pcl::PointCloud<pcl::PointXYZRGB>::Ptr (new pcl::PointCloud<pcl::PointXYZRGB>); 
+
+2. plaincode::getPointCloud(RGB, points, cloud) 
+	make "cloud" using RGB and points
+
+3. plaincode::applyPointCloud(viewer, cloud)
+        make "viewer" using "cloud"
+
+4. viewer->spin(10, true) 
+	display "viewer"
+

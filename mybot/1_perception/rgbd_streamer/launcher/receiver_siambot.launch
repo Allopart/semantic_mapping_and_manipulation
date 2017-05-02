@@ -1,0 +1,16 @@
+<launch>
+
+
+  <include file="$(find rgbd_streamer)/launcher/receiver.launch">
+    <arg name="head" value="/head_left" />
+    <arg name="port_image" value="3213" />
+    <arg name="port_depth" value="3214" />
+  </include>
+
+  <include file="$(find rgbd_streamer)/launcher/receiver.launch">
+    <arg name="head" value="/head_right" />
+    <arg name="port_image" value="4213" />
+    <arg name="port_depth" value="4214" />
+  </include>
+
+</launch>

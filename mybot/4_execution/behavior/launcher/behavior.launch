@@ -1,0 +1,6 @@
+<launch>
+  <arg name="head" default="/"/>
+  <node name="behavior" pkg="behavior" type="behavior_node" respawn="false" output="screen">
+    <param name="head_" value="$(arg head)" />
+  </node>
+</launch>

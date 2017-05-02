@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<RGBDT_transmat type_id="opencv-matrix">
+  <rows>3</rows>
+  <cols>3</cols>
+  <dt>f</dt>
+  <data>
+    8.42972755e-01 1.53522491e-02 6.97265625e+00 6.03613853e-02
+    8.14516068e-01 -3.49382324e+01 -7.45058060e-09 1.49011612e-08 1.</data></RGBDT_transmat>
+</opencv_storage>

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<robot name="xtion" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- we 'import' the macro definition from that file -->
+  <xacro:include filename="$(find semantic_mapping)/rviz/urdf/asus_camera.urdf.xacro"/>
+
+  <!-- this could be anything, but you need a 'parent' link -->
+  <link name="world" />
+  <link name="xtion" />
+
+  <!-- here we 'call' the macro and supply it with the required arguments -->
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "xtion" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+</joint>
+</robot>

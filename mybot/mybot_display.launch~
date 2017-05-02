@@ -1,0 +1,114 @@
+<launch>
+
+<arg name="/mobile_controller/odom"   default="/odom"/>
+
+
+
+<!-- By default, we are not in debug mode-->
+  <arg name="debug" default="false" />
+ 
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server 
+  <include file="$(find mybot_generated)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include> -->
+ 
+  <!-- Given the published joint states, publish tf for the robot links  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+-->
+  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+  <include file="$(find mybot_generated)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+  
+  <!-- Mybot navigation -->
+  <param name="/use_sim_time" value="false"/>
+  <include file="$(find mybot_2dnav)/config/move_base.xml"/>
+  
+ 
+  <!-- AMCL -->
+  <node pkg="amcl" type="amcl" name="amcl">
+      <!-- Publish scans from best pose at a max of 10 Hz -->
+      <param name="odom_model_type" value="omni"/>
+      <param name="odom_frame_id" value="odom"/>
+      <param name="base_frame_id" value="base_footprint"/>
+    </node>  
+
+ <!-- Laser scan  -->
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find mybot_2dnav)/config/my_laser_config.yaml" />
+    </node>
+
+ <!-- RGBD streamer-->
+  <include file="$(find rgbd_streamer)/launcher/receiver.launch"/>
+
+  <include file="$(find image_proc)/launch/image_proc.launch"/>
+
+<!-- Object detection --> 
+	<node pkg="dn_object_detect" type="dn_object_detect" name="dn_object_detect" output="screen">
+    	<param name="camera" type="str" value="/rgbd_receiver/rgb/image_rect_color"/>
+    	<param name="_image_transport" type="str" value="compressed"/>
+    	<param name="yolo_config" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/table_cleaner/cfg/tiny-yolo_table_cleaner.cfg"/>
+    	<param name="yolo_model" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/table_cleaner/weights/tiny-yolo_37000.weights"/>
+         </node>
+
+
+	<!-- Pointcloud extraction  -->
+	<node name="dish_pcl_seg" pkg="cutlery" type="dish_pcl_seg"/>
+        <node name="dish_vis_seg" pkg="cutlery" type="dish_vis_seg" respawn="true"/>
+        <node name="dish_fusion" pkg="cutlery" type="dish_fusion"/>
+	<include file="$(find agile_grasp)/launch/dish_grasp.launch"/>
+        
+        <node name="fork_pcl_seg" pkg="cutlery" type="fork_pcl_seg"/>
+        <node name="fork_vis_seg" pkg="cutlery" type="fork_vis_seg" respawn="true"/>
+        <node name="fork_fusion" pkg="cutlery" type="fork_fusion"/>
+	<include file="$(find agile_grasp)/launch/fork_grasp.launch"/>
+
+        <node name="glass_pcl_seg" pkg="cutlery" type="glass_pcl_seg"/>
+        <node name="glass_vis_seg" pkg="cutlery" type="glass_vis_seg" respawn="true"/>
+        <node name="glass_fusion" pkg="cutlery" type="glass_fusion"/>
+	<include file="$(find agile_grasp)/launch/glass_grasp.launch"/>
+
+        <node name="knife_pcl_seg" pkg="cutlery" type="knife_pcl_seg"/>
+        <node name="knife_vis_seg" pkg="cutlery" type="knife_vis_seg" respawn="true"/>
+        <node name="knife_fusion" pkg="cutlery" type="knife_fusion"/>
+	<include file="$(find agile_grasp)/launch/knife_grasp.launch"/>
+
+        <node name="spoon_pcl_seg" pkg="cutlery" type="spoon_pcl_seg"/>
+        <node name="spoon_vis_seg" pkg="cutlery" type="spoon_vis_seg" respawn="true"/>
+        <node name="spoon_fusion" pkg="cutlery" type="spoon_fusion"/>
+	<include file="$(find agile_grasp)/launch/spoon_grasp.launch"/>
+
+ 
+<!-- Get grasp quaternions  and plan/move 
+	<node name="interface" pkg="cutlery" type="interface.py" respawn="true"/> 
+-->
+
+<!-- Gaze selection 
+<include file="$(find gaze_selection)/launcher/gaze_selection.launch"/>
+-->
+
+<!-- Behaviour node 
+<node name="behavior" pkg="behavior" type="behavior_node" respawn="false" output="screen">
+    <param name="head_" value="$(arg head)" />
+  </node>
+-->
+
+<!-- MAPS -->
+	<!-- No map 
+	<include file="$(find mybot_2dnav)/config/slam_gmapping.xml"/>-->
+	<!-- Has map -->
+	  <node name="map_server" pkg="map_server" type="map_server" args="/home/adrian/catkin_ws/src/mybot/map/mymap2.yaml"/>
+
+
+
+  <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <node name="rviz" pkg="rviz" type="rviz"/> 
+	
+  <!-- Teleoperation node
+  <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard"/> 
+  -->
+
+</launch>

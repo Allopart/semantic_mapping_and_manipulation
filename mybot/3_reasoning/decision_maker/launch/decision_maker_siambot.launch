@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find decision_maker)/launch/decision_maker.launch">
+    <arg name="head" value="/head_left" />
+  </include>
+</launch>
+
+

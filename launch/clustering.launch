@@ -1,0 +1,59 @@
+<launch>
+
+    <!-- Camera description  -->
+    <include file="$(find rgbd_camera_util)/launch/asus.launch"/>
+    <include file="$(find rgbd_camera_util)/launch/display.launch"/>
+
+     <!-- Static transform between fixed frame (map) and sensor base 
+    <node pkg="tf" type="static_transform_publisher" name="world_map_tf" args="0 0 0 0 0 0 map world 30" /> -->
+		<!-- To run LSD-SLAM use: rosrun lsd_slam_core live_slam /image:=/camera/rgb/image_rect_color /camera_info:=/camera/rgb/camera_info -->
+
+
+    <!-- Generate colored PCL -->
+     <node pkg="nodelet" type="nodelet" args="manager" name="nodelet_manager" output="screen"/>
+
+     <node pkg="nodelet" type="nodelet" name="my_cloudify_with_color"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager no-bond">
+      <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
+      <remap from="rgb/image_rect_color" to="/camera/rgb/image_rect_color"/> 
+      <remap from="depth_registered/image_rect" to="/camera/depth/image_rect_raw"/>
+      <remap from="depth_registered/points" to="/original_colored_pcl"/>
+    </node> 
+
+    
+		<!-- Object detection  -->
+		<node pkg="dn_object_detect" type="dn_object_detect" name="dn_object_detect" output="screen">
+    	<param name="camera" type="str" value="/camera/rgb/image_rect_color"/>
+    	<param name="_image_transport" type="str" value="compressed"/>
+    	<param name="yolo_config" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/cfg/yolo-coco.cfg"/>
+    	<param name="yolo_model" type="str" value="/home/adrian/catkin_ws/src/dn_object_detect/darknet/weights/yolo-coco.weights"/>
+      <param name="threshold" type="double" value="0.40"/>
+    </node>
+
+
+    <!-- Crop rgb and depth images with mask + generate PCL -->
+    <node pkg="semantic_mapping" type="mask_data_2_labpcl" name="mask_data_2_pcl"  output="screen" respawn="true"/> 
+    
+    <!-- Extract clusters from pcl (Plane segmentation) -->
+    <node pkg="semantic_mapping" type="class_labpcl_seg" name="class_pcl_seg"  output="screen" respawn="true"/> 
+
+
+    <!-- Run octomap -->
+		<node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen">
+        <param name="resolution" value="0.01" />     
+        <param name="frame_id" type="string" value="map" />
+        <param name="base_frame_id" type="string" value="/sensor_base" />
+        <param name="sensor_model/max_range" value="2.5" />
+        <param name="sensor_model/hit" value="0.6" />
+        <param name="sensor_model/miss" value="0.45" />
+				<param name="latch" value="false" />
+        <param name="filter_speckles" type="bool" value="true" />
+        <remap from="cloud_in" to="/camera/depth/points" /> 
+    </node> 
+
+
+  	<!-- Run Rviz and load the default config to see the state of the move_group node -->
+  	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find semantic_mapping)/rviz/CNN_clust.rviz"/> 
+
+
+</launch>

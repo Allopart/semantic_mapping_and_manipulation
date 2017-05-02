@@ -1,0 +1,9 @@
+<library path="lib/libmybot_gripper_action_controller">
+
+  <class name="posvel_controllers/MybotGripperActionController"
+         type="posvel_controllers::MybotGripperActionController"
+         base_class_type="controller_interface::ControllerBase">
+    <description>
+    </description>
+  </class>
+</library>

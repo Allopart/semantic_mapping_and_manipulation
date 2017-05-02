@@ -1,0 +1,16 @@
+./constraint_samplers/src/default_constraint_samplers.cpp:    if (sampling_pose_.position_constraint_->getLinkModel()->getName() != sampling_pose_.orientation_constraint_->getLinkModel()->getName())
+./constraint_samplers/src/default_constraint_samplers.cpp:  if (sampling_pose_.position_constraint_ && sampling_pose_.position_constraint_->mobileReferenceFrame())
+./constraint_samplers/src/default_constraint_samplers.cpp:    frame_depends_.push_back(sampling_pose_.position_constraint_->getReferenceFrame());
+./constraint_samplers/src/default_constraint_samplers.cpp:    const std::vector<bodies::BodyPtr> &b = sampling_pose_.position_constraint_->getConstraintRegions();
+./constraint_samplers/src/default_constraint_samplers.cpp:  return sampling_pose_.position_constraint_->getLinkModel()->getName();
+./constraint_samplers/src/default_constraint_samplers.cpp:    const moveit::core::LinkModel *lm = sampling_pose_.position_constraint_->getLinkModel();
+./constraint_samplers/src/default_constraint_samplers.cpp:      sampling_pose_.position_constraint_->swapLinkModel(jmg_->getParentModel().getLinkModel(kb_->getTipFrame()), transformed_real_tip_eigen);
+./constraint_samplers/src/default_constraint_samplers.cpp:      std::cout << "LINK MODEL: " << sampling_pose_.position_constraint_->getLinkModel()->getName() << std::endl;
+./constraint_samplers/src/default_constraint_samplers.cpp:          sampling_pose_.position_constraint_->swapLinkModel(jmg_->getParentModel().getLinkModel(it->first->getName()), it->second);
+./constraint_samplers/src/default_constraint_samplers.cpp:             sampling_pose_.position_constraint_ ? sampling_pose_.position_constraint_->getLinkModel()->getName().c_str() : sampling_pose_.orientation_constraint_->getLinkModel()->getName().c_str(), kb_->getTipFrame().c_str());
+./constraint_samplers/src/default_constraint_samplers.cpp:    const std::vector<bodies::BodyPtr> &b = sampling_pose_.position_constraint_->getConstraintRegions();
+./constraint_samplers/src/default_constraint_samplers.cpp:    if (sampling_pose_.position_constraint_->mobileReferenceFrame())
+./constraint_samplers/src/default_constraint_samplers.cpp:      pos = ks.getFrameTransform(sampling_pose_.position_constraint_->getReferenceFrame()) * pos;
+./constraint_samplers/src/default_constraint_samplers.cpp:  if (sampling_pose_.position_constraint_ && sampling_pose_.position_constraint_->hasLinkOffset())
+./constraint_samplers/src/default_constraint_samplers.cpp:    pos = pos - quat.toRotationMatrix() * sampling_pose_.position_constraint_->getLinkOffset();
+./constraint_samplers/src/default_constraint_samplers.cpp:    && (!sampling_pose_.position_constraint_ || sampling_pose_.position_constraint_->decide(state, verbose_).satisfied);

@@ -1,0 +1,8 @@
+require 'torch'
+require 'cunn'
+
+mean[class] = torch.load(paths.concat(class, "model", "lua_mean"))
+std[class] = torch.load(paths.concat(class, "model", "lua_std"))
+model[class] = torch.load(paths.concat(class, "model", "nn_model"))
+
+print ("model loaded")

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>BlueBottle</name>
+    <name>blue_bottle</name>
+    <name>BLUE_BOTTLE</name>
+    <real_name>Blue Bottle</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.032" height="0.185"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.092"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_right_point x="0.00" y="-0.02" z="0.14"/>
+        <put_right_point     x="0.00" y="-0.10" z="0.20"/>
+        <grasp_point    x="0.00" y="0.00" z="0.1"/>
+    </behavior>
+</object>
+

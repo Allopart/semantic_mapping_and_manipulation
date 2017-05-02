@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>refri_left_door</name>
+    <real_name>Refri Left Door</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.01" height="0.004"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.002"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_point x="0.00" y="0.00" z="0.00"/>
+        <put_point     x="0.00" y="0.00" z="0.0"/>
+        <grasp_point    x="0.00" y="0.00" z="0.00"/>
+    </behavior>
+</object>
+

@@ -1,0 +1,23 @@
+# rootDir
+~/objects_yhyoo/colored_things
+
+# object's name & color for displaying (BGR order)
+BOWL 255 0 255
+#UP 0 255 0
+#GT 0 255 0
+#RS 0 0 255
+#RC 0 0 255
+#GC 0 255 0
+CUP 0 255 0
+##BOWL 255 0 255
+#GS 0 255 0
+#GC 0 255 0
+#RT 0 0 255
+#BA 255 0 0
+#BC 255 0 0
+
+# number of channels
+3
+
+# iteration for learning
+100

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<object>
+    <name>GC</name>
+    <name>gc</name>
+    <name>green_cylinder</name>
+    <real_name>Green Cylinder Toy</real_name>
+    <collision>
+        <cylinder>
+            <dimension radius="0.03" height="0.08"/>
+            <pose>
+                <position x="0.00" y="0.00" z="0.04"/>
+                <rpy      r="0.00" p="0.00" y="0.00"/>
+            </pose>
+        </cylinder>
+    </collision>
+    <behavior>
+        <approach_right_point x="-0.02" y="0.00" z="0.12"/>
+        <put_point     x="0.00" y="0.00" z="0.20"/>
+        <grasp_point    x="0.00" y="0.00" z="0.04"/>
+    </behavior>
+</object>
+

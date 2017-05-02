@@ -1,0 +1,49 @@
+arm_right_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - right_shoulder_joint_0
+    - right_shoulder_joint_1
+    - right_shoulder_joint_2
+    - right_elbow_joint_0
+    - right_wrist_joint_0
+    - right_wrist_joint_1
+    - right_wrist_joint_2
+  constraints:
+    goal_time: 1.0
+    stopped_velocity_tolerance: 0.00
+    right_shoulder_joint_0:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_shoulder_joint_1:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_shoulder_joint_2:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_elbow_joint_0:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_wrist_joint_0:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_wrist_joint_1:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+    right_wrist_joint_2:
+      trajectory: 0.0               # Not enforced if unspecified
+      goal: 0.0                     # Not enforced if unspecified
+
+
+  gains:
+    right_shoulder_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_shoulder_joint_1: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_shoulder_joint_2: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_elbow_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_0: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_1: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+    right_wrist_joint_2: {p: 1000.0, d: 250.0, i: 100.0, i_clamp: 4.0}
+
+  state_publish_rate:  10            # Override default
+  action_monitor_rate: 10            # Override default
+  stop_trajectory_duration: 0        # Override default
+
